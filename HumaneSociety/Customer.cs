@@ -79,7 +79,7 @@ namespace HumaneSociety
             }
         }
 
-        private void CheckAdoptionStatus()
+        public void CheckAdoptionStatus()
         {
             var pendingAdoptions = Query.GetUserAdoptionStatus(client).ToList();
             if (pendingAdoptions.Count == 0)

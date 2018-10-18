@@ -15,15 +15,22 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
-        internal static Client GetClient(string userName, string password)
+        public static Client GetClient(string userName, string password)
         {
-            throw new NotImplementedException();
+            var requiredData = (from x in database.Clients
+                                where x.UserName == userName && x.Password == password
+                                select x).FirstOrDefault();
+
+            return requiredData;
         }
 
-        internal static object GetUserAdoptionStatus(Client client)
+        public static IQueryable<Adoption> GetUserAdoptionStatus(Client client)
         {
-            throw new NotImplementedException();
+            var requiredData = from x in database.Clients
+                               select x;
+            return requiredData;
         }
+
 
         internal static object RetrieveClients()
         {
@@ -46,12 +53,17 @@ namespace HumaneSociety
                                select x;
             return requiredData;
         
-    }
-
-        internal static void updateClient(Client client)
-        {
-            throw new NotImplementedException();
         }
+        public static void updateClient (Client client)
+        {
+            var requiredData = (from x in database.Clients
+                                select
+
+        }
+        //internal static void updateClient(Client client)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         internal static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
         {
@@ -73,6 +85,11 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
+        internal static object GetPendingAdoptions()
+        {
+            throw new NotImplementedException();
+        }
+
         internal static void UpdateAddress(Client client)
         {
             throw new NotImplementedException();
@@ -84,6 +101,36 @@ namespace HumaneSociety
         }
 
         internal static object SearchForAnimalByMultipleTraits()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static void UpdateShot(string v, Animal animal)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static object GetShots(Animal animal)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static void EnterUpdate(Animal animal, Dictionary<int, string> updates)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static void RemoveAnimal(object animal)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static void UpdateAdoption(bool v, Adoption adoption)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static Room GetRoom(int animalId)
         {
             throw new NotImplementedException();
         }

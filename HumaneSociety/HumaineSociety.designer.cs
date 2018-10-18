@@ -2537,9 +2537,11 @@ namespace HumaneSociety
 		private string _Abbreviation;
 		
 		private EntitySet<Address> _Addresses;
-		
-    #region Extensibility Method Definitions
-    partial void OnLoaded();
+        internal object abbrev;
+        internal object name;
+
+        #region Extensibility Method Definitions
+        partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
     partial void OnUSStateIdChanging(int value);
@@ -2628,8 +2630,10 @@ namespace HumaneSociety
 				this._Addresses.Assign(value);
 			}
 		}
-		
-		public event PropertyChangingEventHandler PropertyChanging;
+
+        public object ID { get; internal set; }
+
+        public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
 		
