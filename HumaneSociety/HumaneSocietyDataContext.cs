@@ -5,5 +5,7 @@
         public HumaneSocietyDataContext()
         {
         }
+
+        public object Animals { get; internal set; }
     }
 }

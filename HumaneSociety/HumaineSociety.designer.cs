@@ -57,9 +57,9 @@ namespace HumaneSociety
     partial void InsertShot(Shot instance);
     partial void UpdateShot(Shot instance);
     partial void DeleteShot(Shot instance);
-    partial void InsertSpecy(Specy instance);
-    partial void UpdateSpecy(Specy instance);
-    partial void DeleteSpecy(Specy instance);
+    partial void InsertSpecies(Species instance);
+    partial void UpdateSpecies(Species instance);
+    partial void DeleteSpecies(Species instance);
     partial void InsertUSState(USState instance);
     partial void UpdateUSState(USState instance);
     partial void DeleteUSState(USState instance);
@@ -167,11 +167,11 @@ namespace HumaneSociety
 			}
 		}
 		
-		public System.Data.Linq.Table<Specy> Species
+		public System.Data.Linq.Table<Species> Species
 		{
 			get
 			{
-				return this.GetTable<Specy>();
+				return this.GetTable<Species>();
 			}
 		}
 		
@@ -451,7 +451,7 @@ namespace HumaneSociety
 		
 		private EntityRef<Employee> _Employee;
 		
-		private EntityRef<Specy> _Specy;
+		private EntityRef<Species> _Species;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -490,7 +490,7 @@ namespace HumaneSociety
 			this._Rooms = new EntitySet<Room>(new Action<Room>(this.attach_Rooms), new Action<Room>(this.detach_Rooms));
 			this._DietPlan = default(EntityRef<DietPlan>);
 			this._Employee = default(EntityRef<Employee>);
-			this._Specy = default(EntityRef<Specy>);
+			this._Species = default(EntityRef<Species>);
 			OnCreated();
 		}
 		
@@ -545,7 +545,7 @@ namespace HumaneSociety
 			{
 				if ((this._SpeciesId != value))
 				{
-					if (this._Specy.HasLoadedOrAssignedValue)
+					if (this._Species.HasLoadedOrAssignedValue)
 					{
 						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
 					}
@@ -853,26 +853,26 @@ namespace HumaneSociety
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Specy_Animal", Storage="_Specy", ThisKey="SpeciesId", OtherKey="SpeciesId", IsForeignKey=true)]
-		public Specy Specy
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Species_Animal", Storage="_Species", ThisKey="SpeciesId", OtherKey="SpeciesId", IsForeignKey=true)]
+		public Species Species
 		{
 			get
 			{
-				return this._Specy.Entity;
+				return this._Species.Entity;
 			}
 			set
 			{
-				Specy previousValue = this._Specy.Entity;
+				Species previousValue = this._Species.Entity;
 				if (((previousValue != value) 
-							|| (this._Specy.HasLoadedOrAssignedValue == false)))
+							|| (this._Species.HasLoadedOrAssignedValue == false)))
 				{
 					this.SendPropertyChanging();
 					if ((previousValue != null))
 					{
-						this._Specy.Entity = null;
+						this._Species.Entity = null;
 						previousValue.Animals.Remove(this);
 					}
-					this._Specy.Entity = value;
+					this._Species.Entity = value;
 					if ((value != null))
 					{
 						value.Animals.Add(this);
@@ -882,14 +882,12 @@ namespace HumaneSociety
 					{
 						this._SpeciesId = default(Nullable<int>);
 					}
-					this.SendPropertyChanged("Specy");
+					this.SendPropertyChanged("Species");
 				}
 			}
 		}
-
-        public object Species { get; internal set; }
-
-        public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
 		
@@ -2411,7 +2409,7 @@ namespace HumaneSociety
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Species")]
-	public partial class Specy : INotifyPropertyChanging, INotifyPropertyChanged
+	public partial class Species : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
@@ -2432,7 +2430,7 @@ namespace HumaneSociety
     partial void OnNameChanged();
     #endregion
 		
-		public Specy()
+		public Species()
 		{
 			this._Animals = new EntitySet<Animal>(new Action<Animal>(this.attach_Animals), new Action<Animal>(this.detach_Animals));
 			OnCreated();
@@ -2478,7 +2476,7 @@ namespace HumaneSociety
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Specy_Animal", Storage="_Animals", ThisKey="SpeciesId", OtherKey="SpeciesId")]
+		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="Species_Animal", Storage="_Animals", ThisKey="SpeciesId", OtherKey="SpeciesId")]
 		public EntitySet<Animal> Animals
 		{
 			get
@@ -2514,13 +2512,13 @@ namespace HumaneSociety
 		private void attach_Animals(Animal entity)
 		{
 			this.SendPropertyChanging();
-			entity.Specy = this;
+			entity.Species = this;
 		}
 		
 		private void detach_Animals(Animal entity)
 		{
 			this.SendPropertyChanging();
-			entity.Specy = null;
+			entity.Species = null;
 		}
 	}
 	
@@ -2537,11 +2535,9 @@ namespace HumaneSociety
 		private string _Abbreviation;
 		
 		private EntitySet<Address> _Addresses;
-        internal object abbrev;
-        internal object name;
-
-        #region Extensibility Method Definitions
-        partial void OnLoaded();
+		
+    #region Extensibility Method Definitions
+    partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
     partial void OnCreated();
     partial void OnUSStateIdChanging(int value);
@@ -2630,10 +2626,8 @@ namespace HumaneSociety
 				this._Addresses.Assign(value);
 			}
 		}
-
-        public object ID { get; internal set; }
-
-        public event PropertyChangingEventHandler PropertyChanging;
+		
+		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
 		

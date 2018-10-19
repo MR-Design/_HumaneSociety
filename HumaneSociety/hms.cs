@@ -16,7 +16,7 @@ namespace HumaneSociety
         }
 
         public static Client GetClient(string userName, string password)
-        {
+        {//100
             var requiredData = (from x in database.Clients
                                 where x.UserName == userName && x.Password == password
                                 select x).FirstOrDefault();
@@ -26,20 +26,27 @@ namespace HumaneSociety
 
         public static IQueryable<Adoption> GetUserAdoptionStatus(Client client)
         {
-            var requiredData = from x in database.Clients
-                               select x;
+            //100
+            var clientAdoptions = database.Adoptions.Where(a => a.ClientId == client.ClientId);
+            return clientAdoptions;
+            
+        }
+
+
+        internal static IQueryable<Client> RetrieveClients()
+        {//100
+            var requiredData = from x in database.Clients select x;
             return requiredData;
         }
 
+        public static IQueryable<Animal> GetAnimalByID(int iD)
+        {//100
 
-        internal static object RetrieveClients()
-        {
-            throw new NotImplementedException();
-        }
-
-        internal static object GetAnimalByID(int iD)
-        {
-            throw new NotImplementedException();
+            var requiredData =
+                (from x in database.Animals
+                 where x.AnimalId == iD
+                 select x);
+            return requiredData;
         }
 
         internal static void Adopt(object animal, Client client)
@@ -48,36 +55,46 @@ namespace HumaneSociety
         }
 
         internal static IQueryable<USState> GetStates()
-        {
+        {//100
             var requiredData = from x in database.USStates
                                select x;
             return requiredData;
         
         }
-        public static void updateClient (Client client)
+        public static Client updateClient (Client client)
+        {//100
+            var requiredData = (from x in database.Clients
+                                where x.ClientId ==client.ClientId
+                                select x).First();
+            
+            database.Clients.InsertOnSubmit(requiredData);
+            return requiredData;
+
+        }
+       
+
+        public static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
+        {
+           
+        }
+
+        public static void UpdateUsername(Client client)
+        {//100
+            var requiredData = (from x in database.Clients
+                                where x.ClientId == client.ClientId
+                                select x).First();
+
+            requiredData.UserName = client.UserName;
+            database.Clients.InsertOnSubmit(requiredData);
+            database.SubmitChanges();
+        }
+
+        public static void UpdateEmail(Client client)
         {
             var requiredData = (from x in database.Clients
-                                select
-
-        }
-        //internal static void updateClient(Client client)
-        //{
-        //    throw new NotImplementedException();
-        //}
-
-        internal static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal static void UpdateUsername(Client client)
-        {
-            throw new NotImplementedException();
-        }
-
-        internal static void UpdateEmail(Client client)
-        {
-            throw new NotImplementedException();
+                                where x.ClientId== client.ClientId
+                                select x).First();
+           // requiredData = UpdateEmail;
         }
 
         internal static void UpdateFirstName(Client client)

@@ -61,6 +61,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="hms.cs" />
+    <Compile Include="Species.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserEmployee.cs" />
     <Compile Include="UserInterface.cs" />
