@@ -1762,8 +1762,6 @@ namespace HumaneSociety
 		private System.Nullable<int> _FoodAmountInCups;
 		
 		private EntitySet<Animal> _Animals;
-        internal string planName;
-
         #region Extensibility Method Definitions
         partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
