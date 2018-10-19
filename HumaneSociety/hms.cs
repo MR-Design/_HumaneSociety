@@ -1,18 +1,68 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HumaneSociety
 {
     public static class Query
     {
         private static HumaineSocietyDataContext database = new HumaineSocietyDataContext();
+        internal static IQueryable<USState> GetStates()
+        {//100
+            var requiredData = from x in database.USStates
+                               select x;
+            return requiredData;
 
-        internal static void RunEmployeeQueries(Employee employee, string v)
+        }
+        public static void UpdateAddress(Client client)
         {
-            throw new NotImplementedException();
+            var requiredData = (from x in database.Clients
+                                where x.ClientId == client.ClientId
+                                select x).First();
+            requiredData.Address = client.Address;
+
+            database.SubmitChanges();
+        }
+
+        public static void UpdateLastName(Client client)
+        {
+            var requiredData = (from x in database.Clients
+                                where x.ClientId == client.ClientId
+                                select x).First();
+            requiredData.LastName = client.LastName;
+
+            database.SubmitChanges();
+        }
+        public static void RemoveAnimal(Animal animal)
+        {
+            var animalToRemove = database.Animals.Where(a => a.AnimalId == animal.AnimalId).FirstOrDefault();
+            database.Animals.DeleteOnSubmit(animalToRemove);
+            database.SubmitChanges();
+        }
+        public static void UpdateAdoption(bool isApproved, Adoption adoption)
+        {
+            var adoptionToUpdate = database.Adoptions.Where(a => a.AdoptionId == adoption.AdoptionId).FirstOrDefault();
+            if (isApproved)
+            {
+                adoptionToUpdate.ApprovalStatus = "Approved";
+
+            }
+            else
+                adoptionToUpdate.ApprovalStatus = " Not Approved";
+        }
+
+            database.SubmitChanges();
+        }
+
+        public static Room GetRoom(int animalID)
+        {
+            var room = database.Rooms.Where(r => r.AnimalId == animalID).FirstOrDefault();
+            return room;
+        }
+        public static DietPlan GetDietPlan(string planName)
+        {
+            var dietPlan = database.DietPlans.Where(p => p.Name == planName).FirstOrDefault();
+            return dietPlan;
         }
 
         public static Client GetClient(string userName, string password)
@@ -49,18 +99,38 @@ namespace HumaneSociety
             return requiredData;
         }
 
-        internal static void Adopt(object animal, Client client)
-        {
-            throw new NotImplementedException();
+        public static void UpdateUsername(Client client)
+        {//100
+            var requiredData = (from x in database.Clients
+                                where x.ClientId == client.ClientId
+                                select x).First();
+
+            requiredData.UserName = client.UserName;
+
+            database.SubmitChanges();
         }
 
-        internal static IQueryable<USState> GetStates()
-        {//100
-            var requiredData = from x in database.USStates
-                               select x;
-            return requiredData;
-        
+        public static void UpdateEmail(Client client)
+        {
+            var requiredData = (from x in database.Clients
+                                where x.ClientId == client.ClientId
+                                select x).First();
+            requiredData.Email = client.Email;
+
+            database.SubmitChanges();
         }
+
+        public static void UpdateFirstName(Client client)
+        {
+            var requiredData = (from x in database.Clients
+                                where x.ClientId == client.ClientId
+                                select x).First();
+            requiredData.FirstName = client.FirstName;
+
+            database.SubmitChanges();
+        }
+
+
         public static Client updateClient (Client client)
         {//100
             var requiredData = (from x in database.Clients
@@ -72,68 +142,33 @@ namespace HumaneSociety
 
         }
        
+        public static List <Adoption> GetPendingAdoptions()//new
+           {
+           var PendingAdoption = database.Adoptions.ToList();
+           return PendingAdoption;
+           }
 
+        public static Species GetSpecies() //New
+        {
+            var Sps = database.Species.Single();
+
+            return Sps;
+        }
         public static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
         {
            
         }
 
-        public static void UpdateUsername(Client client)
-        {//100
-            var requiredData = (from x in database.Clients
-                                where x.ClientId == client.ClientId
-                                select x).First();
-
-            requiredData.UserName = client.UserName;
-            database.Clients.InsertOnSubmit(requiredData);
-            database.SubmitChanges();
-        }
-
-        public static void UpdateEmail(Client client)
-        {
-            var requiredData = (from x in database.Clients
-                                where x.ClientId== client.ClientId
-                                select x).First();
-            requiredData.Email = client.Email;
-            database.Clients.InsertOnSubmit(requiredData);
-            database.SubmitChanges();
-        }
-
-        public static void UpdateFirstName(Client client)
-        {
-            var requiredData = (from x in database.Clients
-                                where x.ClientId == client.ClientId
-                                select x).First();
-            requiredData.FirstName = client.FirstName;
-            database.Clients.InsertOnSubmit(requiredData);
-            database.SubmitChanges();
-        }
-
-        internal static object GetPendingAdoptions()
+        
+        internal static void RunEmployeeQueries(Employee employee, string v)
         {
             throw new NotImplementedException();
         }
 
-        public static void UpdateAddress(Client client)
+        internal static void Adopt(object animal, Client client)
         {
-            var requiredData = (from x in database.Clients
-                                where x.ClientId == client.ClientId
-                                select x).First();
-            requiredData.Address = client.Address;
-            database.Clients.InsertOnSubmit(requiredData);
-            database.SubmitChanges();
+            throw new NotImplementedException();
         }
-
-        public static void UpdateLastName(Client client)
-        {
-            var requiredData = (from x in database.Clients
-                                where x.ClientId == client.ClientId
-                                select x).First();
-            requiredData.LastName = client.LastName;
-            database.Clients.InsertOnSubmit(requiredData);
-            database.SubmitChanges();
-        }
-
         internal static object SearchForAnimalByMultipleTraits()
         {
             throw new NotImplementedException();
@@ -154,28 +189,6 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
-        public static void RemoveAnimal(Animal animal)
-        {
-            var animalToRemove = database.Animals.Where(a => a.AnimalId == animal.AnimalId).FirstOrDefault();
-            database.Animals.DeleteOnSubmit(animalToRemove);
-            database.SubmitChanges();
-        }
-        public static void UpdateAdoption(bool isApproved, Adoption adoption)
-        {
-            var adoptionToUpdate = database.Adoptions.Where(a => a.AdoptionId == adoption.AdoptionId).FirstOrDefault();
-
-            database.SubmitChanges();
-        }
-
-        public static Room GetRoom(int animalID)
-        {
-            var room = database.Rooms.Where(r => r.AnimalId == animalID).FirstOrDefault();
-            return room;
-        }
-        public static DietPlan GetDietPlan(string planName)
-        {
-            var dietPlan = database.DietPlans.Where(p => p.Name == planName).FirstOrDefault();
-            return dietPlan;
-        }
+       
     }
 }
