@@ -94,12 +94,19 @@ namespace HumaneSociety
             var requiredData = (from x in database.Clients
                                 where x.ClientId== client.ClientId
                                 select x).First();
-           // requiredData = UpdateEmail;
+            requiredData.Email = client.Email;
+            database.Clients.InsertOnSubmit(requiredData);
+            database.SubmitChanges();
         }
 
-        internal static void UpdateFirstName(Client client)
+        public static void UpdateFirstName(Client client)
         {
-            throw new NotImplementedException();
+            var requiredData = (from x in database.Clients
+                                where x.ClientId == client.ClientId
+                                select x).First();
+            requiredData.FirstName = client.FirstName;
+            database.Clients.InsertOnSubmit(requiredData);
+            database.SubmitChanges();
         }
 
         internal static object GetPendingAdoptions()
@@ -107,14 +114,24 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
-        internal static void UpdateAddress(Client client)
+        public static void UpdateAddress(Client client)
         {
-            throw new NotImplementedException();
+            var requiredData = (from x in database.Clients
+                                where x.ClientId == client.ClientId
+                                select x).First();
+            requiredData.Address = client.Address;
+            database.Clients.InsertOnSubmit(requiredData);
+            database.SubmitChanges();
         }
 
-        internal static void UpdateLastName(Client client)
+        public static void UpdateLastName(Client client)
         {
-            throw new NotImplementedException();
+            var requiredData = (from x in database.Clients
+                                where x.ClientId == client.ClientId
+                                select x).First();
+            requiredData.LastName = client.LastName;
+            database.Clients.InsertOnSubmit(requiredData);
+            database.SubmitChanges();
         }
 
         internal static object SearchForAnimalByMultipleTraits()
@@ -137,19 +154,28 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
-        internal static void RemoveAnimal(object animal)
+        public static void RemoveAnimal(Animal animal)
         {
-            throw new NotImplementedException();
+            var animalToRemove = database.Animals.Where(a => a.AnimalId == animal.AnimalId).FirstOrDefault();
+            database.Animals.DeleteOnSubmit(animalToRemove);
+            database.SubmitChanges();
+        }
+        public static void UpdateAdoption(bool isApproved, Adoption adoption)
+        {
+            var adoptionToUpdate = database.Adoptions.Where(a => a.AdoptionId == adoption.AdoptionId).FirstOrDefault();
+
+            database.SubmitChanges();
         }
 
-        internal static void UpdateAdoption(bool v, Adoption adoption)
+        public static Room GetRoom(int animalID)
         {
-            throw new NotImplementedException();
+            var room = database.Rooms.Where(r => r.AnimalId == animalID).FirstOrDefault();
+            return room;
         }
-
-        internal static Room GetRoom(int animalId)
+        public static DietPlan GetDietPlan(string planName)
         {
-            throw new NotImplementedException();
+            var dietPlan = database.DietPlans.Where(p => p.Name == planName).FirstOrDefault();
+            return dietPlan;
         }
     }
 }
