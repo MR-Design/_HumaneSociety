@@ -48,9 +48,9 @@ namespace HumaneSociety
 
             }
             else
+            { 
                 adoptionToUpdate.ApprovalStatus = " Not Approved";
         }
-
             database.SubmitChanges();
         }
 
@@ -59,12 +59,13 @@ namespace HumaneSociety
             var room = database.Rooms.Where(r => r.AnimalId == animalID).FirstOrDefault();
             return room;
         }
-        public static DietPlan GetDietPlan(string planName)
-        {
-            var dietPlan = database.DietPlans.Where(p => p.Name == planName).FirstOrDefault();
-            return dietPlan;
-        }
 
+        public static DietPlan DietPlan(string planName)
+        {
+            var DietPlan = database.DietPlans.Where(p => p.Name == planName).FirstOrDefault();
+            return DietPlan;
+        }
+      
         public static Client GetClient(string userName, string password)
         {//100
             var requiredData = (from x in database.Clients
@@ -136,8 +137,10 @@ namespace HumaneSociety
             var requiredData = (from x in database.Clients
                                 where x.ClientId ==client.ClientId
                                 select x).First();
-            
-            database.Clients.InsertOnSubmit(requiredData);
+            requiredData = client;
+
+            database.SubmitChanges();
+           
             return requiredData;
 
         }
@@ -156,20 +159,43 @@ namespace HumaneSociety
         }
         public static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
         {
-           
+            
+                //100
+                Client client = new Client();
+                client.FirstName = firstName;
+                client.LastName = lastName;
+                client.UserName = username;
+                client.Password = password;
+                client.Email = email;
+                client.Address.AddressLine1 = streetAddress;
+                client.Address.Zipcode = zipCode;
+                client.Address.USStateId = state;
+                database.Clients.InsertOnSubmit(client);
+            database.SubmitChanges();
+        }
+        public static Employee RetrieveEmployeeUser(string email, int employeeNumber)
+        {
+            var employee = database.Employees.Where(e => e.Email == email && e.EmployeeNumber == employeeNumber).FirstOrDefault();
+            return employee;
         }
 
-        
+        public static Employee EmployeeLogin(string userName, string password)
+        {
+
+            var employee = database.Employees.Where(e => e.UserName == userName && e.Password == password).First();
+            return employee;
+        }
+    
         internal static void RunEmployeeQueries(Employee employee, string v)
         {
-            throw new NotImplementedException();
+            throw new NotImplementedException(); 
         }
 
         internal static void Adopt(object animal, Client client)
         {
             throw new NotImplementedException();
         }
-        internal static object SearchForAnimalByMultipleTraits()
+        public static IQueryable<Animal> SearchForAnimalByMultipleTraits()
         {
             throw new NotImplementedException();
         }
@@ -179,7 +205,7 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
-        internal static object GetShots(Animal animal)
+        internal static List<AnimalShot> GetShots(Animal animal)
         {
             throw new NotImplementedException();
         }
@@ -189,6 +215,21 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
+        internal static void AddAnimal(Animal animal)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static void AddUsernameAndPassword(Employee employee)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal static bool CheckEmployeeUserNameExist(string username)
+        {
+            throw new NotImplementedException();
+        }
+
        
     }
-}
+    }

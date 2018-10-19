@@ -51,7 +51,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>HumaineSociety.dbml</DependentUpon>
     </Compile>
-    <Compile Include="HumaneSocietyDataContext.cs" />
     <Compile Include="PointOfEntry.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -61,7 +60,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="hms.cs" />
-    <Compile Include="Species.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserEmployee.cs" />
     <Compile Include="UserInterface.cs" />
@@ -83,6 +81,9 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="database\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

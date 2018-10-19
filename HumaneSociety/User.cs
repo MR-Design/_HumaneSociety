@@ -45,7 +45,7 @@ namespace HumaneSociety
         }
         protected IQueryable<Animal> SearchForAnimal()
         {
-            HumaneSocietyDataContext context = new HumaneSocietyDataContext();
+            HumaineSocietyDataContext context = new HumaineSocietyDataContext();
             var animals = from data in context.Animals select data;
 
             var searchParameters = UserInterface.GetAnimalCriteria();
