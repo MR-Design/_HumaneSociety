@@ -39,20 +39,35 @@ namespace HumaneSociety
             database.Animals.DeleteOnSubmit(animalToRemove);
             database.SubmitChanges();
         }
-        public static void UpdateAdoption(bool isApproved, Adoption adoption)
+        public static void UpdateAdoption(bool v, Adoption adoption) //here
         {
-            var adoptionToUpdate = database.Adoptions.Where(a => a.AdoptionId == adoption.AdoptionId).FirstOrDefault();
-            if (isApproved)
+            var animal = database.Animals.Where(x => x.AnimalId == adoption.AnimalId).FirstOrDefault();
+            if (v)
             {
-                adoptionToUpdate.ApprovalStatus = "Approved";
+                animal.AdoptionStatus = "Adopted";
 
             }
             else
-            { 
-                adoptionToUpdate.ApprovalStatus = " Not Approved";
-        }
+            {
+                animal.AdoptionStatus = "Not Adopted";
+            }
             database.SubmitChanges();
         }
+
+        //public static void UpdateAdoption(bool isApproved, Adoption adoption)
+        //{
+        //    var adoptionToUpdate = database.Adoptions.Where(a => a.AdoptionId == adoption.AdoptionId).FirstOrDefault();
+        //    if (isApproved)
+        //    {
+        //        adoptionToUpdate.ApprovalStatus = "Approved";
+
+        //    }
+        //    else
+        //    { 
+        //        adoptionToUpdate.ApprovalStatus = " Not Approved";
+        //}
+        //    database.SubmitChanges();
+        //}
 
         public static Room GetRoom(int animalID)
         {
@@ -145,11 +160,19 @@ namespace HumaneSociety
 
         }
        
+
+
         public static List <Adoption> GetPendingAdoptions()//new
            {
            var PendingAdoption = database.Adoptions.ToList();
            return PendingAdoption;
            }
+        public static void AddAnimal(Animal animal)////// check
+        {
+            var addingAnimal = database.Animals.FirstOrDefault();
+            database.Animals.InsertOnSubmit(addingAnimal);
+            database.SubmitChanges();
+        }
 
         public static Species GetSpecies() //New
         {
@@ -185,16 +208,28 @@ namespace HumaneSociety
             var employee = database.Employees.Where(e => e.UserName == userName && e.Password == password).First();
             return employee;
         }
-    
-        internal static void RunEmployeeQueries(Employee employee, string v)
+        internal static void Adopt(IQueryable<Animal> animal, Client client) // Needs To check
         {
-            throw new NotImplementedException(); 
+            Adoption NewAnimalToAdopt = new Adoption();
+            NewAnimalToAdopt.AnimalId = client.ClientId;
+            database.Adoptions.InsertOnSubmit(NewAnimalToAdopt);
+            database.SubmitChanges();
+        }
+        internal static void AddUsernameAndPassword(Employee employee)///// Not Sent Yet
+        {
+            var AddingUserAndPass = database.Employees.Where(a => a.UserName == employee.UserName &&
+            a.Password == employee.Password).FirstOrDefault();
+
+        }
+        public delegate void EmployeeToVoidFunction(Employee employee);
+        public static void RunEmployeeQueries(Employee employee, string v)
+        {
+       
         }
 
-        internal static void Adopt(object animal, Client client)
-        {
-            throw new NotImplementedException();
-        }
+       
+
+            
         public static IQueryable<Animal> SearchForAnimalByMultipleTraits()
         {
             throw new NotImplementedException();
@@ -215,15 +250,9 @@ namespace HumaneSociety
             throw new NotImplementedException();
         }
 
-        internal static void AddAnimal(Animal animal)
-        {
-            throw new NotImplementedException();
-        }
 
-        internal static void AddUsernameAndPassword(Employee employee)
-        {
-            throw new NotImplementedException();
-        }
+
+        
 
         internal static bool CheckEmployeeUserNameExist(string username)
         {
