@@ -252,7 +252,8 @@ namespace HumaneSociety
         public delegate void EmployeeFunction(Employee employee);
         public static void RunEmployeeQueries(Employee employee, string operation)
         {
-            EmployeeFunction employeeCrudFunctions = new EmployeeFunction(ReadEmployee);
+            EmployeeFunction employeeCrudFunctions = null;
+                //new EmployeeFunction(ReadEmployee);
 
             switch (operation)
             {
@@ -266,22 +267,35 @@ namespace HumaneSociety
                     employeeCrudFunctions = UpdateEmployee;
                     break;
                 case "delete":
-                    employeeCrudFunctions = DeleteEmployee;
+                    employeeCrudFunctions = RemoveEmployee;
                     break;
             }
 
             employeeCrudFunctions(employee);
         }
 
-        private static void ReadEmployee(Employee employee)
+        public static void ReadEmployee(Employee employee)
         {
-            throw new NotImplementedException();
+            var EmployeeInfo = database.Employees.Where(e => e.EmployeeId == employee.EmployeeId).FirstOrDefault();
+            Console.WriteLine(EmployeeInfo.FirstName + " " + EmployeeInfo.LastName);
+            Console.WriteLine("Employee #" + EmployeeInfo.EmployeeNumber);
+        
+         
+        
+            
         }
 
         private static void CreateEmployee(Employee employee)// creating an employee
         {
-            Employee Newemployee = new Employee();
 
+            Console.Write("Please Chose a Paseword!! Case Sencitive");
+            string InputPasword = Console.ReadLine();
+
+            Console.Write("Please Chose a User Name!! ");
+            var InputUserName = Console.ReadLine();
+
+            employee.Password = InputPasword;
+            employee.UserName = InputUserName;
 
             database.Employees.InsertOnSubmit(employee);
 
@@ -289,7 +303,7 @@ namespace HumaneSociety
         }
         private static void UpdateEmployee(Employee employee) // updating an employee
         {
-            var query = database.Employees.Where(e => e.EmployeeId == employee.EmployeeId);
+            var query = database.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber);
 
             foreach (Employee employeeFound in query)
             {
@@ -299,20 +313,18 @@ namespace HumaneSociety
                 employeeFound.Email = employee.Email;
                 employeeFound.Animals = employee.Animals;
             }
-
+           
+          
             database.SubmitChanges();
         }
-        private static void DeleteEmployee(Employee employee)//deleting an employee
+        private static void RemoveEmployee(Employee employee)//deleting an employee
         {
-            var query = database.Employees.Where(e => e.EmployeeId == employee.EmployeeId);
+            var query = database.Employees.Where(e => e.EmployeeNumber == employee.EmployeeNumber).FirstOrDefault();
 
-            foreach (Employee employeeFound in query)
-            {
-                database.Employees.DeleteOnSubmit(employeeFound);
-            }
+
+            database.Employees.DeleteOnSubmit(query);
+            database.SubmitChanges();
         }
-
-
 
         internal static IQueryable<Animal> SearchForAnimalByMultipleTraits()
         {
