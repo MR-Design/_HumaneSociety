@@ -180,21 +180,26 @@ namespace HumaneSociety
 
             return Sps;
         }
-        public static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
+        internal static void AddNewClient(string firstName, string lastName, string username, string password, string email, string streetAddress, int zipCode, int state)
         {
-
             //100
             Client client = new Client();
+            Address address = new Address();
+            address.AddressLine1 = streetAddress;
+            address.Zipcode = zipCode;
+            address.USStateId = state;
             client.FirstName = firstName;
             client.LastName = lastName;
             client.UserName = username;
             client.Password = password;
             client.Email = email;
-            client.Address.AddressLine1 = streetAddress;
-            client.Address.Zipcode = zipCode;
-            client.Address.USStateId = state;
+            database.Addresses.InsertOnSubmit(address);
+            database.SubmitChanges();
+            client.AddressId = address.AddressId;
             database.Clients.InsertOnSubmit(client);
             database.SubmitChanges();
+
+            
         }
         public static Employee RetrieveEmployeeUser(string email, int employeeNumber)
         {
@@ -215,20 +220,20 @@ namespace HumaneSociety
             database.Adoptions.InsertOnSubmit(NewAnimalToAdopt);
             database.SubmitChanges();
         }
-        internal static void AddUsernameAndPassword(Employee employee)///// Not Sent Yet
-        {
-            var AddingUserAndPass = database.Employees.Where(a => a.UserName == employee.UserName &&
-            a.Password == employee.Password).FirstOrDefault();
-
-        }
-
         //internal static void AddUsernameAndPassword(Employee employee)///// Not Sent Yet
-        //   {
-        // var employeeToUpdate = database.Employees.Where(e => employee.EmployeeId == e.EmployeeId).Select(e => e).FirstOrDefault();
-        //employeeToUpdate.UserName = employee.UserName;
-        //    employeeToUpdate.Password = employee.Password;
-        //    database.SubmitChanges();
+        //{
+        //    var AddingUserAndPass = database.Employees.Where(a => a.UserName == employee.UserName &&
+        //    a.Password == employee.Password).FirstOrDefault();
+
         //}
+
+        internal static void AddUsernameAndPassword(Employee employee) 
+        {
+            var employeeToUpdate = database.Employees.Where(e => employee.EmployeeId == e.EmployeeId).Select(e => e).FirstOrDefault();
+            employeeToUpdate.UserName = employee.UserName;
+            employeeToUpdate.Password = employee.Password;
+            database.SubmitChanges();
+        }
 
         public static bool CheckEmployeeUserNameExist(string username)
         {
@@ -244,12 +249,36 @@ namespace HumaneSociety
         }
 
 
-        public delegate void EmployeeToVoidFunction(Employee employee);
-        public static void RunEmployeeQueries(Employee employee, string v)
+        public delegate void EmployeeFunction(Employee employee);
+        public static void RunEmployeeQueries(Employee employee, string operation)
         {
+            EmployeeFunction employeeCrudFunctions = new EmployeeFunction(ReadEmployee);
 
+            switch (operation)
+            {
+                case "create":
+                    employeeCrudFunctions = CreateEmployee;
+                    break;
+                case "read":
+                    employeeCrudFunctions = ReadEmployee;
+                    break;
+                case "update":
+                    employeeCrudFunctions = UpdateEmployee;
+                    break;
+                case "delete":
+                    employeeCrudFunctions = DeleteEmployee;
+                    break;
+            }
+
+            employeeCrudFunctions(employee);
         }
-        public static void CreateEmployee(Employee employee)// creating an employee
+
+        private static void ReadEmployee(Employee employee)
+        {
+            throw new NotImplementedException();
+        }
+
+        private static void CreateEmployee(Employee employee)// creating an employee
         {
             Employee Newemployee = new Employee();
 
@@ -285,9 +314,25 @@ namespace HumaneSociety
 
 
 
-        public static IQueryable<Animal> SearchForAnimalByMultipleTraits()
+        internal static IQueryable<Animal> SearchForAnimalByMultipleTraits()
         {
-            throw new NotImplementedException();
+            Console.Write("Enter Animal? Name, Age ,Gender ");
+
+            Console.Write("Enter Animal Name Please!! ");
+            string NameInput = Console.ReadLine();
+
+
+            Console.Write("How Old is your Animal ");
+            int AgeInput = Int32.Parse(Console.ReadLine());
+
+            Console.Write("Enter Animal Gender!! ");
+            string GenderInput = Console.ReadLine();
+
+            var AnimalSearch = database.Animals.Where(a => a.Name == NameInput)
+                .Where(a => a.Gender == GenderInput)
+                .Where(a => a.Age == AgeInput);
+
+            return AnimalSearch;
         }
 
         internal static void UpdateShot(string v, Animal animal)

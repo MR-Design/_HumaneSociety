@@ -10,10 +10,9 @@ namespace HumaneSociety
     {
         static void Main(string[] args)
         {
-            Employee employee = new Employee();
-            employee.Email = "this is a real email";
+            //employee.Email = "this is a real email";
 
-            Query.CreateEmployee(employee);
+            //Query.CreateEmployee(employee);
              PointOfEntry.Run();
         }
     }

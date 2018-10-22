@@ -285,7 +285,7 @@ namespace HumaneSociety
 
             try
             {
-                employee = Query.RetrieveEmployeeUser(email, employeeNumber);
+                Query.RetrieveEmployeeUser(email, employeeNumber);
             }
             catch
             {
