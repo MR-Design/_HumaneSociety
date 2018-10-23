@@ -201,11 +201,18 @@ namespace HumaneSociety
 
             
         }
-        public static Employee RetrieveEmployeeUser(string email, int employeeNumber)
+        internal static Employee RetrieveEmployeeUser(string email, int employeeNumber) //New
         {
-            var employee = database.Employees.Where(e => e.Email == email && e.EmployeeNumber == employeeNumber).FirstOrDefault();
-            return employee;
+            var GettingEmployee = database.Employees.Where(g => g.Email == email)
+                .Where(g => g.EmployeeNumber == employeeNumber).FirstOrDefault();
+            return GettingEmployee;
+
         }
+        //public static Employee RetrieveEmployeeUser(string email, int employeeNumber)
+        //{
+        //    var employee = database.Employees.Where(e => e.Email == email && e.EmployeeNumber == employeeNumber).FirstOrDefault();
+        //    return employee;
+        //}
 
         public static Employee EmployeeLogin(string userName, string password)
         {
@@ -227,12 +234,21 @@ namespace HumaneSociety
 
         //}
 
-        internal static void AddUsernameAndPassword(Employee employee) 
+        internal static void AddUsernameAndPassword(Employee employee)//not working
         {
-            var employeeToUpdate = database.Employees.Where(e => employee.EmployeeId == e.EmployeeId).Select(e => e).FirstOrDefault();
-            employeeToUpdate.UserName = employee.UserName;
-            employeeToUpdate.Password = employee.Password;
-            database.SubmitChanges();
+            Console.Write("Please Chose a Password!! Case Sensitive");
+            string InputPasword = Console.ReadLine();
+
+            Console.Write("Please Chose a User Name!! ");
+            var InputUserName = Console.ReadLine();
+
+            employee.Password = InputPasword;
+            employee.UserName = InputUserName;
+            var AddingPasse = database.Employees.Where(a => a.UserName == employee.UserName
+            && a.Password == employee.Password).FirstOrDefault();
+            AddingPasse.UserName = InputUserName;
+            AddingPasse.Password = InputPasword;
+            database.Employees.InsertOnSubmit(AddingPasse);
         }
 
         public static bool CheckEmployeeUserNameExist(string username)
@@ -288,14 +304,7 @@ namespace HumaneSociety
         private static void CreateEmployee(Employee employee)// creating an employee
         {
 
-            Console.Write("Please Chose a Paseword!! Case Sencitive");
-            string InputPasword = Console.ReadLine();
-
-            Console.Write("Please Chose a User Name!! ");
-            var InputUserName = Console.ReadLine();
-
-            employee.Password = InputPasword;
-            employee.UserName = InputUserName;
+          
 
             database.Employees.InsertOnSubmit(employee);
 
